@@ -1,0 +1,83 @@
+#https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html
+#https://dev.to/landonp1203/how-to-properly-set-up-git-on-your-computer-33eo
+
+How to properly set up Git on your computer!
+ landonp1203 profile image Landon Patmore   Jan 24 '18 Updated on Jan 25, 2018 ・7 min read 
+#git #github #setup
+Installing Git
+OSX Setup
+If you have never used Git on your computer, you most likely will not have it installed. Pull up your terminal and type in git. It should prompt you that you need to install Xcode Command Line Tools to actually install Git. Once it is done downloading, Git will be properly installed on your computer and you will now be able to use it from the command line.
+
+Windows Setup
+Windows does not come with Git, nor does it come with a built in way like OSX to install it without having to install additional software. Go to this link: Download Git which is a link to the installer download. Go through the steps and keep the default settings as there is no reason to change them, unless you seriously know what you are doing. This will install Git Bash which is a terminal emulator for Windows which will allow you to access Git.
+
+Side Note: While you may be able to use Git through the command prompt, I would highly recommend using Git Bash as it gives you information about the branch you are working on right in the terminal compared to command prompt which does not tell you any information, as well as you can use Linux commands.
+
+A kind user has told me that you can install a Plugin for PowerShell (Command Prompt) which will allow you to see branch information and commit differences just like Git Bash! To install, you must have Git installed already, and type in the following command in Command Prompt: Install-Module posh-git -Scope CurrentUser. Here is the link to the repository if you are having issues with the plugin for any reason: dahlbyk/posh-git.
+
+Linux
+If you are running Linux, you most likely know what you are doing and have used Git before. But if you haven't, go to your terminal, and type in git. Linux usually comes with Git so it should already be there, but if it is not, type this into the terminal: sudo apt-get install git. This will install Git, and you will be able to go from there.
+
+Setting Up Git
+There are a couple steps to get you up and running properly with Git so there are no hiccups. For these steps, it is assumed that you are either in Terminal (OSX/Linux) or Git Bash/Command Prompt (Windows). The steps are as follows:
+
+git config --global user.email "GIT SERVICE EMAIL" - Sets your email globally for Git.
+git config --global user.name "GIT SERVICE NAME (NOT USERNAME)" - Sets your name globally for Git.
+There are two ways to go about this step:
+This part of the article assumes that you are using a service called GitHub. GitHub is a highly popular Git service that allows you to use their service to upload your code to their web servers for version control rather than keeping everything local. There are other services such as: GitLab, BitBucket, and Microsoft Visual Studio Git. Each has their own specific way of setting up the next steps, but the SSH Key method will be the same up until you have to add the Key to your specific service. As for the HTTPS method, it may be completely different. Each service should have a documentation page going about both of these methods which should be very easy to access.
+
+Way 1 - Generating a SSH Key (Recommended)
+This sounds daunting, but it is probably the easiest way out of the two personally (I use it) and better for the long run to use. We are going to generate a SSH Key. From Github's Documentation: Using the SSH protocol, you can connect and authenticate to remote servers and services. With SSH keys, you can connect to GitHub without supplying your username or password at each visit.
+
+Steps:
+
+ssh-keygen -t rsa -b 4096 -C "GITHUB EMAIL" - This creates a new ssh key, using the provided email as a label
+When you're prompted to "Enter a file in which to save the key," press Enter. This accepts the default file location.
+At the prompt, type a secure passphrase.
+eval "$(ssh-agent -s)" - Start the ssh-agent in the background.
+ssh-add -K ~/.ssh/id_rsa - Add your SSH private key to the ssh-agent.
+pbcopy < ~/.ssh/id_rsa.pub - Copies your SSH key to your clipboard.
+While logged into Github, go to the top right, click your profile picture, and click Settings in the dropdown. Then click SSH and GPG Keys, or click this link to bring you there: SSH and GPG Keys
+Click New SSH Key, give your key a title My Computer, and paste the key in the large box.
+Done. Now anytime you clone a repository, Github will automatically give you the SSH URL and you will have to provide your SSH Key paraphrase anytime you push and pull changes and you will not need to type in your username or your password anymore!
+Way 2 - Generating a Personal Token
+This sounds daunting as well, but it is easy as well! We will generate a GitHub Personal Token to use on our computers. We need to do this if we are using the HTTPS URL from the repo if we have Two-Factor Authentication set up.
+
+Steps:
+
+Go to the top right, click your profile picture, and click Settings in the dropdown.
+On the bottom left, click Developer Settings.
+On the left, click Personal access tokens.
+Click the Generate New Token button.
+In the Token Description box, type a name for your token, My Computer.
+Tick the box that says repo and then scroll to the bottom and click Generate Token.
+Important: you will only see this token once for security reasons, so if you would like to (and I recommend as I don't use this method, so I don't know if it saves the token when you use it), copy the token to somewhere safe.
+Done. Now anytime you clone a repository, Github will automatically give you the HTTPS URL and you will have to provide your Github Username as well as password which is the personal token we just generated, not your actual Github Password, anytime you push or pull changes (it may save the token so it may not ask you every time).
+Setting up a global .gitignore
+A kind user mentioned to me that another very important thing to do when setting up Git is to set up a global .gitignore file. A .gitignore file is used by Git to globally ignore a list of files that you may not want in your repos, such as: .jar, .exe, .DS_Store, etc. To set this up, copy the following into your terminal of choice:
+
+git config --global core.excludesfile '~/.gitignore'
+# on a mac:
+echo .DS_Store >> ~/.gitignore
+# If you use vim
+echo '.*.sw[po]' >> ~/.gitignore
+# And any other files that should never be checked into git in ANY repo
+Each individual repository can have its own unique .gitignore, but the global one applies to them all.
+
+Repository Setup
+This section applies to all Git Services.
+
+Now that we have setup our Git client to work like a well oiled machine, we now need to do some setup on the repository itself. The team you are associated with is the repo you will be working on. Click the repo that is your team's, and you will be brought to an overview of your repository which shows: files, commits, collaborators, and other things.
+
+What we are interested in is the Fork button in the top right. Forking is the act of copying a repo to your own account. We do this so that no one is directly working on the Main Repository, or Upstream.
+
+It may ask you to click your username or automatically start forking the repo to your profile. A couple of seconds later, you will see your fork. It looks the exact same, but now it is your personal repo and you can do whatever you would like and it will not affect anyone else! Awesome! We also know it is our fork and not the main repo because in the top left it will tell you where it is forked from.
+
+Next, we want to clone our Fork, not the main repo (you will run into issues real quick!), by clicking the Clone or Download button and copying the link in the dropdown. Don't change to HTTPS if you are using SSH and vice versa (again issues!). cd into whatever directory you would like the repo to be in. Next type in the command: git clone and then paste the link after and click Enter. This will clone your fork on to your computer, which means you now have a local copy of your fork! Now cd into the folder that was now downloaded.
+
+We are almost done with setup. We need to add the main repo, or Upstream, to our local repo so that we can pull changes down when others have their Pull Requests accepted. This is so that we can always be up to date with the main repo. Go back to Github and click on the main repo, not your fork, and click the Clone or Download button and copy the link you get from the main repo. Now, make sure you are inside the repo on your computer and type the following command: git remote add upstream and then paste the link and click Enter. It should not give you any feedback which means it was added. To check if it was added, type git remote -v which will list the remotes with their URLs. You should have origin and upstream there.
+
+We are now all set up inside our repo!
+
+Git Applications
+Since some of you may not be super comfortable using just the terminal for Git operations, you can use a couple different Git GUI Applications to help you visualize what's going on so you don't screw something up on the command line!
