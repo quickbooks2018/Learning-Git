@@ -1,0 +1,128 @@
+### Installation ###
+https://guyrking.com/2018/09/22/encrypt-files-with-git-crypt.html
+
+https://www.ryadel.com/en/centos-linux-make-g-command-not-found-how-to-fix/
+ yum install gcc-c++
+
+
+Prerequisites
+Install Homebrew (macOS only)
+Install GPG (on Linux, this is probably already installed; on macOS, brew install gpg)
+Install git-crypt
+Linux
+Clone the repo ------------------------------------------------------------------------------> git clone https://github.com/AGWA/git-crypt.git
+cd /path/to/git-crypt
+make
+git-crypt --version should work - otherwise cp /path/to/git-crypt/git-crypt /usr/local/bin
+More installation details
+Mac OS X
+brew install git-crypt
+A Git repository <my-repo> to which you would like to add new files to be encrypted
+
+
+#### Ubuntu-18
+
+apt install -y git-crypt
+
+########################################################################################################
+
+Encrypt files
+cd /path/to/<my-repo>
+git-crypt init
+touch .gitattributes
+Specify future files to encrypt in .gitattributes
+<files-to-encrypt> filter=git-crypt diff=git-crypt
+where <files-to-encrypt> follows the same syntax as files specified in .gitignore
+
+Add files specified in .gitattributes to <my-repo> and push up to Git host
+Verify in Git host files are encrypted
+
+
+
+###########################################################################################################
+https://serverfault.com/questions/214605/gpg-does-not-have-enough-entropy
+Have you had a look at RNG?
+
+Fedora/Rh/Centos types: sudo yum install rng-tools
+
+On deb types: sudo apt-get install rng-tools to set it up.
+
+Then run sudo rngd -r /dev/urandom before generating the keys.
+
+gpg --gen-key 
+
+gpg --list-keys
+
+git-crypt add-gpg-user "Muhammad Asim <quickbooks2018@gmail.com>"
+
+git-crypt status
+
+git-crypt status -f
+
+LOCKING
+##############################################################################
+-----> <file-name>--> .gitattributes ---> which you want to be encrypt example
+  vim .gitattributes
+    README.md filter=git-crypt diff=git-crypt
+  *.md README.md filter=git-crypt diff=git-crypt
+
+
+#where <files-to-encrypt> follows the same syntax as files specified in .gitignore
+
+vim .gitignore
+README.md filter=git-crypt diff=git-crypt
+
+##################################################################################
+  
+gpg --list-keys
+
+git-crypt add-gpg-user "Muhammad Asim <quickbooks2018@gmail.com>"
+
+git-crypt status -f
+
+-------------------------------------------------------------------------------------------> "At this Point Must Do -----> git-crypt export-key /path/to/key"
+git-crypt status  ---> (You will see your file is encrypted)
+
+
+git add *
+
+git status
+
+git commit -m "Learning encryption"
+
+git push origin master
+
+
+#######################################################################################
+UN-LOCKING
+git-crypt status
+git-crypt status -f
+git-crypt status
+---------------------------------------------------------------------------------------------------> git-crypt unlock /path/to/key
+
+#######################################################################################
+
+
+# When pushing Again
+
+git-crypt lock
+
+git add *
+
+git status
+
+git commit -m "Learning encryption"
+
+git push origin master
+
+
+
+
+#
+
+
+>>>> Main Tutorial File <<< 
+https://guyrking.com/2018/09/22/encrypt-files-with-git-crypt.html
+http://manpages.ubuntu.com/manpages/bionic/man1/git-crypt.1.html
+# https://www.youtube.com/watch?v=Gv6pfL5QxRs&t=398s
+
