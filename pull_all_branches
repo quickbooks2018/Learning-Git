@@ -1,0 +1,28 @@
+# https://intellipaat.com/community/3649/git-fetch-all-branches-how-to-fetch-all-git-branches
+
+
+git fetch --all and git pull -all will only track the remote branches and track local branches that track remote branches respectively.
+
+But it is not sufficient to track all remote branches
+
+For tracking all remote branches run this command
+
+ for remote in `git branch -r`; do git branch --track ${remote#origin/} $remote; done
+
+Run this command only if there are remote branches on the server which are untracked by your local branches.
+
+Then after this command run 
+
+git fetch --all
+
+git pull --all
+
+Thus, you can fetch all git branches.
+
+On a side note: some will suggest you with
+
+ git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+
+But this will create a local branch named origin/branchname which will give you "refname 'origin/branchname' is ambiguous whenever you referred to it.
+
+For more information regarding Git commands please go through the following tutorial link:
