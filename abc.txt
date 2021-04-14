@@ -1,4 +1,1 @@
-<<<<<<< HEAD
-=======
 abcd
->>>>>>> cloudgeeks/cicd
